@@ -30,16 +30,15 @@ export const authOptions: NextAuthOptions = {
       return encodedToken;
     },
     decode: async ({ secret, token }) => {
-      const decodeToken = jsonwebtoken.verify(token!, secret) as JWT;
-      return decodeToken;
+      const decodeToken = jsonwebtoken.verify(token!, secret);
+      return decodeToken as JWT;
     },
   },
 
   theme: {
-    colorScheme: "light",
-    logo: "/logo.png",
+    colorScheme: "dark",
   },
-  
+
   callbacks: {
     async session({ session }) {
       const email = session?.user?.email as string;
@@ -54,8 +53,8 @@ export const authOptions: NextAuthOptions = {
           },
         };
         return newSession;
-      } catch (error) {
-        console.log("Error retrieving user data", error);
+      } catch (error: any) {
+        console.error("Error retrieving user data", error.message);
         return session;
       }
     },
@@ -74,7 +73,7 @@ export const authOptions: NextAuthOptions = {
         }
         return true;
       } catch (error: any) {
-        console.log(error);
+        console.log("Error checking if user exists: ", error.message);
         return false;
       }
     },
